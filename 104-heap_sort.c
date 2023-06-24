@@ -1,84 +1,74 @@
-#include <stdio.h>
 #include "sort.h"
 
+void swap_ints(int *a, int *b);
+void max_heapify(int *array, size_t size, size_t base, size_t root);
+void heap_sort(int *array, size_t size);
+
 /**
- * heap_sort - Sorts an array of integers in ascending order using Heap Sort
+ * swap_ints - Swap two integers in an array.
+ * @a: The first integer to swap.
+ * @b: The second integer to swap.
+ */
+void swap_ints(int *a, int *b)
+{
+int tmp;
+
+tmp = *a;
+*a = *b;
+*b = tmp;
+}
+
+/**
+ * max_heapify - Turn a binary tree into a complete binary heap.
+ * @array: An array of integers representing a binary tree.
+ * @size: The size of the array/tree.
+ * @base: The index of the base row of the tree.
+ * @root: The root node of the binary tree.
+ */
+void max_heapify(int *array, size_t size, size_t base, size_t root)
+{
+size_t left, right, large;
+
+left = 2 * root + 1;
+right = 2 * root + 2;
+large = root;
+
+if (left < base && array[left] > array[large])
+large = left;
+if (right < base && array[right] > array[large])
+large = right;
+
+if (large != root)
+{
+swap_ints(array + root, array + large);
+print_array(array, size);
+max_heapify(array, size, base, large);
+}
+}
+
+/**
+ * heap_sort - Sort an array of integers in ascending
+ *             order using the heap sort algorithm.
+ * @array: An array of integers.
+ * @size: The size of the array.
  *
- * @array: The array to be sorted
- * @size: Number of elements in the array
+ * Description: Implements the sift-down heap sort
+ * algorithm. Prints the array after each swap.
  */
 void heap_sort(int *array, size_t size)
 {
+int i;
+
 if (array == NULL || size < 2)
 return;
 
-/* Build the heap (rearrange the array) */
-build_heap(array, size);
+for (i = (size / 2) - 1; i >= 0; i--)
+max_heapify(array, size, size, i);
 
-/* Heap sort */
-for (int i = size - 1; i > 0; i--)
+for (i = size - 1; i > 0; i--)
 {
-/* Swap the root (largest element) with the last element */
-swap(&array[0], &array[i]);
+swap_ints(array, array + i);
 print_array(array, size);
-
-/* Sift down the new root to maintain the heap property */
-sift_down(array, i, 0);
+max_heapify(array, size, i, 0);
 }
-}
-
-/**
- * build_heap - Builds a heap from an array
- *
- * @array: The array to be transformed into a heap
- * @size: Number of elements in the array
- */
-void build_heap(int *array, size_t size)
-{
-/* Start from the last non-leaf node and sift down each node */
-for (int i = size / 2 - 1; i >= 0; i--)
-sift_down(array, size, i);
-}
-
-/**
- * sift_down - Sifts down a node in the heap to maintain the heap property
- *
- * @array: The array representing the heap
- * @size: Number of elements in the array
- * @index: Index of the node to be sifted down
- */
-void sift_down(int *array, size_t size, int index)
-{
-int largest = index;
-int left = 2 * index + 1;
-int right = 2 * index + 2;
-
-/* Compare the left child with the current root */
-if (left < size && array[left] > array[largest])
-largest = left;
-
-/* Compare the right child with the current root */
-if (right < size && array[right] > array[largest])
-largest = right;
-
-/* If the largest is not the current root, swap and sift down the new root */
-if (largest != index)
-{
-swap(&array[index], &array[largest]);
-print_array(array, size);
-sift_down(array, size, largest);
-}
-}
-
-/**
- * swap - Swaps two elements in an array
- *
- * @a: Pointer to the first element
- * @b: Pointer to the second element
- */
-void swap(int *a, int *b)
-{
-int temp = *a;
-*a = *b;
-*b = temp;
 }
