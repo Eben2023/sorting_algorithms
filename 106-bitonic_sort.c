@@ -2,8 +2,8 @@
 
 void _swapfunc(int *a, int *b);
 void bit_merge_func(int *array, size_t size, size_t start, size_t seq,
-		char flow);
-void bit_seq_func(int *array, size_t size, size_t start, size_t seq, char flow);
+char flow);
+void _bitseq_fn(int *array, size_t size, size_t start, size_t seq, char flow);
 void bitonic_sort(int *array, size_t size);
 
 /**
@@ -13,11 +13,11 @@ void bitonic_sort(int *array, size_t size);
  */
 void _swapfunc(int *a, int *b)
 {
-	int tmp;
+int tmp;
 
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
+tmp = *a;
+*a = *b;
+*b = tmp;
 }
 
 /**
@@ -29,48 +29,48 @@ void _swapfunc(int *a, int *b)
  * @flow: The direction to sort in.
  */
 void bit_merge_func(int *array, size_t size, size_t start, size_t seq,
-		char flow)
+char flow)
 {
-	size_t i, jump = seq / 2;
+size_t i, jump = seq / 2;
 
-	if (seq > 1)
-	{
-		for (i = start; i < start + jump; i++)
-		{
-			if ((flow == UP && array[i] > array[i + jump]) ||
-			    (flow == DOWN && array[i] < array[i + jump]))
-				_swapfunc(array + i, array + i + jump);
-		}
-		bit_merge_func(array, size, start, jump, flow);
-		bit_merge_func(array, size, start + jump, jump, flow);
-	}
+if (seq > 1)
+{
+for (i = start; i < start + jump; i++)
+{
+if ((flow == UP && array[i] > array[i + jump]) ||
+    (flow == DOWN && array[i] < array[i + jump]))
+_swapfunc(array + i, array + i + jump);
+}
+bit_merge_func(array, size, start, jump, flow);
+bit_merge_func(array, size, start + jump, jump, flow);
+}
 }
 
 /**
- * bit_seq_func - Convert an array of integers into a bitonic sequence.
+ * _bitseq_fn - Convert an array of integers into a bitonic sequence.
  * @array: An array of integers.
  * @size: The size of the array.
  * @start: The starting index of a block of the building bitonic sequence.
  * @seq: The size of a block of the building bitonic sequence.
  * @flow: The direction to sort the bitonic sequence block in.
  */
-void bit_seq_func(int *array, size_t size, size_t start, size_t seq, char flow)
+void _bitseq_fn(int *array, size_t size, size_t start, size_t seq, char flow)
 {
-	size_t cut = seq / 2;
-	char *str = (flow == UP) ? "UP" : "DOWN";
+size_t cut = seq / 2;
+char *str = (flow == UP) ? "UP" : "DOWN";
 
-	if (seq > 1)
-	{
-		printf("Merging [%lu/%lu] (%s):\n", seq, size, str);
-		print_array(array + start, seq);
+if (seq > 1)
+{
+printf("Merging [%lu/%lu] (%s):\n", seq, size, str);
+print_array(array + start, seq);
 
-		bit_seq_func(array, size, start, cut, UP);
-		bit_seq_func(array, size, start + cut, cut, DOWN);
-		bit_merge_func(array, size, start, seq, flow);
+_bitseq_fn(array, size, start, cut, UP);
+_bitseq_fn(array, size, start + cut, cut, DOWN);
+bit_merge_func(array, size, start, seq, flow);
 
-		printf("Result [%lu/%lu] (%s):\n", seq, size, str);
-		print_array(array + start, seq);
-	}
+printf("Result [%lu/%lu] (%s):\n", seq, size, str);
+print_array(array + start, seq);
+}
 }
 
 /**
@@ -84,8 +84,8 @@ void bit_seq_func(int *array, size_t size, size_t start, size_t seq, char flow)
  */
 void bitonic_sort(int *array, size_t size)
 {
-	if (array == NULL || size < 2)
-		return;
+if (array == NULL || size < 2)
+return;
 
-	bit_seq_func(array, size, 0, size, UP);
+_bitseq_fn(array, size, 0, size, UP);
 }
