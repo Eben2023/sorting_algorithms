@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DOWN 1
+#define UP 0
+
 /**
  * struct listint_s - Doubly linked list node
  *
