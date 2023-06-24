@@ -48,7 +48,7 @@ j--;
 } while (array[j] > pivot);
 
 if (i >= j)
-return j;
+return (j);
 
 swap_ints(&array[i], &array[j]);
 print_array(array, size);
