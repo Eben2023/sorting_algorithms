@@ -1,5 +1,10 @@
 #include "sort.h"
 
+void swap(int *a, int *b);
+int partition(int *array, int low, int high);
+void quick_sort_recursive(int *array, int low, int high);
+
+
 /**
  * swap - Swaps two elements in an array
  *
