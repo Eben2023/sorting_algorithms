@@ -38,7 +38,7 @@ if (seq > 1)
 for (i = start; i < start + jump; i++)
 {
 if ((flow == UP && array[i] > array[i + jump]) ||
-    (flow == DOWN && array[i] < array[i + jump]))
+(flow == DOWN && array[i] < array[i + jump]))
 _swapfunc(array + i, array + i + jump);
 }
 bit_merge_func(array, size, start, jump, flow);
