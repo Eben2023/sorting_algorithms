@@ -2,8 +2,13 @@
 #include <stdlib.h>
 #include "sort.h"
 
+void merge_sort_recursive(int *array, int left, int right, int *temp_array);
+void merge_arrays(int *array, int left, int middle,
+int right, int *temp_array);
+
 /**
- * merge_sort - Sorts an array of integers in ascending order using Merge Sort
+ * merge_sort - Sorts an array of integers in ascending
+ * order using Merge Sort
  *
  * @array: The array to be sorted
  * @size: Number of elements in the array
@@ -52,7 +57,8 @@ merge_arrays(array, left, middle, right, temp_array);
  * @right: Right index of the second subarray
  * @temp_array: Temporary array for merging
  */
-void merge_arrays(int *array, int left, int middle, int right, int *temp_array)
+void merge_arrays(int *array, int left, int middle,
+int right, int *temp_array)
 {
 int i = left;
 int j = middle + 1;
