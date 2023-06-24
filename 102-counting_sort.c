@@ -1,71 +1,91 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "sort.h"
 
-/**
- * counting_sort - Sorts an array of integers in ascending order using Counting Sort
- *
- * @array: The array to be sorted
- * @size: Number of elements in the array
- */
-void counting_sort(int *array, size_t size)
-{
-int max_value = 0;
-size_t i;
-int *counting_array, *sorted_array;
+void swap_ints(int *a, int *b);
+int lomuto_partition(int *array, size_t size, int left, int right);
+void lomuto_sort(int *array, size_t size, int left, int right);
+void quick_sort(int *array, size_t size);
 
+/**
+ * swap_ints - Swap two integers in an array.
+ * @a: The first integer to swap.
+ * @b: The second integer to swap.
+ */
+void swap_ints(int *a, int *b)
+{
+int tmp;
+
+tmp = *a;
+*a = *b;
+*b = tmp;
+}
+
+/**
+ * lomuto_partition - Order a subset of an array of integers according to
+ *the Lomuto partition scheme (last element as pivot).
+ * @array: The array of integers.
+ * @size: The size of the array.
+ * @left: The starting index of the subset to order.
+ * @right: The ending index of the subset to order.
+ *
+ * Return: The final partition index.
+ */
+int lomuto_partition(int *array, size_t size, int left, int right)
+{
+int pivot, i, j;
+
+pivot = array[right];
+i = left - 1;
+
+for (j = left; j < right; j++)
+{
+if (array[j] <= pivot)
+{
+i++;
+swap_ints(&array[i], &array[j]);
+print_array(array, size);
+}
+}
+
+swap_ints(&array[i + 1], &array[right]);
+print_array(array, size);
+
+return (i + 1);
+}
+
+/**
+ * lomuto_sort - Implement the quicksort algorithm through recursion.
+ * @array: An array of integers to sort.
+ * @size: The size of the array.
+ * @left: The starting index of the array partition to order.
+ * @right: The ending index of the array partition to order.
+ *
+ * Description: Uses the Lomuto partition scheme.
+ */
+void lomuto_sort(int *array, size_t size, int left, int right)
+{
+int part;
+
+if (left < right)
+{
+part = lomuto_partition(array, size, left, right);
+lomuto_sort(array, size, left, part - 1);
+lomuto_sort(array, size, part + 1, right);
+}
+}
+
+/**
+ * quick_sort - Sort an array of integers in ascending
+ *  order using the quicksort algorithm.
+ * @array: An array of integers.
+ * @size: The size of the array.
+ *
+ * Description: Uses the Lomuto partition scheme. Prints
+ *  the array after each swap of two elements.
+ */
+void quick_sort(int *array, size_t size)
+{
 if (array == NULL || size < 2)
 return;
 
-/* Find the maximum value in the array */
-for (i = 0; i < size; i++)
-{
-if (array[i] > max_value)
-max_value = array[i];
-}
-
-/* Create the counting array with size max_value + 1 */
-counting_array = malloc((max_value + 1) * sizeof(int));
-if (counting_array == NULL)
-return;
-
-/* Initialize the counting array with zeros */
-for (i = 0; i <= max_value; i++)
-counting_array[i] = 0;
-
-/* Count the occurrences of each element in the array */
-for (i = 0; i < size; i++)
-counting_array[array[i]]++;
-
-printf("Counting array: ");
-print_array(counting_array, max_value + 1);
-
-/* Compute the cumulative sum of the counting array */
-for (i = 1; i <= max_value; i++)
-counting_array[i] += counting_array[i - 1];
-
-/* Create a sorted array */
-sorted_array = malloc(size * sizeof(int));
-if (sorted_array == NULL)
-{
-free(counting_array);
-return;
-}
-
-/* Place elements in the sorted array based on counting array */
-for (i = 0; i < size; i++)
-{
-sorted_array[counting_array[array[i]] - 1] = array[i];
-counting_array[array[i]]--;
-}
-
-/* Copy the sorted array back to the original array */
-for (i = 0; i < size; i++)
-array[i] = sorted_array[i];
-
-printf("Sorted array: ");
-print_array(array, size);
-
-free(counting_array);
-free(sorted_array);
+lomuto_sort(array, size, 0, size - 1);
 }
